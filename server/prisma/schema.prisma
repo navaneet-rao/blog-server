@@ -1,0 +1,67 @@
+// schema.prisma
+// Using Prisma schema defining the data model for the application and the database schema.
+// The schema is used to generate the Prisma Client, which is a type-safe database client that can be used to interact with the database.
+// 
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Below is the data model for the User, Admin, Post, Category, and Comment models.
+// The User model has a one-to-one relationship with the Admin model.
+// The User model has a one-to-many relationship with the Post and Comment models.
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  posts     Post[]
+  comments  Comment[]
+  admin     Admin?   @relation("UserAdmin")
+  adminId   String?  @unique
+}
+
+// The Admin model has a one-to-one relationship with the User model.
+model Admin {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation("UserAdmin", fields: [userId], references: [id])
+}
+
+// The Post model has a one-to-many relationship with the Comment model.
+// The Post model has a many-to-one relationship with the User model.
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  category  String
+  comments  Comment[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// The Category model is used to define the categories for the posts.
+model Category {
+  id    String  @id @default(cuid())
+  name  String  @unique
+}
+
+// The Comment model has a many-to-one relationship with the User and Post models.
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

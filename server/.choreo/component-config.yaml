@@ -1,0 +1,64 @@
+# component-config.yaml
+
+api:
+  components:
+    - name: Admin API
+      type: endpoint
+      path: /api/admin
+      method: POST
+      handler: src/api/admin.js
+
+    - name: All Posts API
+      type: endpoint
+      path: /api/allposts
+      method: GET
+      handler: src/api/allposts.js
+
+    - name: Categories API
+      type: endpoint
+      path: /api/categories
+      method: GET
+      handler: src/api/categories.js
+
+    - name: Comments API
+      type: endpoint
+      path: /api/comments
+      method: POST
+      handler: src/api/comments.js
+
+    - name: Login API
+      type: endpoint
+      path: /api/login
+      method: POST
+      handler: src/api/login.js
+
+    - name: Post API
+      type: endpoint
+      path: /api/post
+      method: POST
+      handler: src/api/post.js
+
+    - name: Signup API
+      type: endpoint
+      path: /api/sigup
+      method: POST
+      handler: src/api/sigup.js
+
+    - name: User Routes API
+      type: endpoint
+      path: /api/userroutes
+      method: GET
+      handler: src/api/userroutes.js
+
+  configuration:
+    - name: Database
+      type: service
+      properties:
+        connectionString: postgresql://blogdb_owner:iy65OBwGYHFR@ep-noisy-butterfly-a17qgkt5-pooler.ap-southeast-1.aws.neon.tech/blogdb?sslmode=require
+
+    - name: CORS
+      type: middleware
+      properties:
+        allowedOrigins:
+          - http://localhost:3000
+          - https://blog.navaneet.tech
